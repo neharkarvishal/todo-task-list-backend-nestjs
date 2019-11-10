@@ -12,9 +12,12 @@ export class TasksController {
   }
 
   @Post()
-  createTask(@Body() body): void {
+  createTask(
+    @Body('title') title: string,
+    @Body('description') description: string,
+  ): void {
     // return this.taskService.createTask(title, description);
     // tslint:disable-next-line:no-console
-    console.log('body', body);
+    console.log('body', title, description);
   }
 }
