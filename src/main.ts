@@ -6,4 +6,5 @@ async function bootstrap() {
   await app.listen(3000);
 }
 
-bootstrap();
+// tslint:disable-next-line:no-console
+bootstrap().then(r => console.table(r));
