@@ -31,4 +31,10 @@ export class TasksController {
   createTask(@Body() createTaskDto: CreateTaskDto): Promise<Task> {
     return this.taskService.createTask(createTaskDto);
   }
+
+  @Delete('/:id')
+  deleteTask(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    // tslint:disable-next-line:no-console
+    return this.taskService.deleteTask(id);
+  }
 }

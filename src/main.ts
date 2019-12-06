@@ -7,4 +7,4 @@ async function bootstrap() {
 }
 
 // tslint:disable-next-line:no-console
-bootstrap().then(r => console.table(r));
+bootstrap().then(r => console.log(r));
