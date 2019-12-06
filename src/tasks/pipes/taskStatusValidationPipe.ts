@@ -1,6 +1,6 @@
 /* tslint:disable:no-console */
 import { BadRequestException, PipeTransform } from '@nestjs/common';
-import { TaskStatus } from '../task.model';
+import { TaskStatus } from '../taskstatus.enum';
 
 export class TaskStatusValidationPipe implements PipeTransform {
   readonly allowedStatses = [

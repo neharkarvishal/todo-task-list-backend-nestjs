@@ -1,65 +1,36 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Task, TaskStatus } from './task.model';
-import * as uuid from 'uuid/v1';
 import { CreateTaskDto } from './dto/createTask.dto';
-import { GetTaskFilterDto } from './dto/getTaskFilterDto';
+import { TaskRepository } from './task.repository';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Task } from './task.entity';
+import { TaskStatus } from './taskstatus.enum';
 
 @Injectable()
 export class TasksService {
-  private tasks: Task[] = [];
+  constructor(
+    @InjectRepository(TaskRepository)
+    private taskRepository: TaskRepository,
+  ) {}
 
-  getAllTasks(): Task[] {
-    return this.tasks;
-  }
+  async getTaskById(id: number): Promise<Task> {
+    const found = await this.taskRepository.findOne(id);
 
-  createTask(createTaskDto: CreateTaskDto): Task {
-    const { title, description } = createTaskDto;
-    const task: Task = {
-      id: uuid(),
-      title,
-      description,
-      status: TaskStatus.OPEN,
-    };
-
-    this.tasks.push(task);
-    return task;
-  }
-
-  getTaskById(id: string): Task {
-    const foundTasks: Task = this.tasks.find(task => task.id === id);
-
-    if (!foundTasks) {
+    if (!found) {
       throw new NotFoundException(`Task with ID '${id}' not found!`);
     }
-    return foundTasks;
+
+    return found;
   }
 
-  deleteTask(id: string): void {
-    const foundTask: Task = this.getTaskById(id);
-    this.tasks = this.tasks.filter(task => task.id !== foundTask.id);
-  }
+  async createTask(createTaskDto: CreateTaskDto) {
+    const task = new Task();
+    const { title, description } = createTaskDto;
 
-  updateTaskStatus(id: string, status: TaskStatus): Task {
-    const task: Task = this.getTaskById(id);
-    task.status = status;
+    task.title = title;
+    task.description = description;
+    task.status = TaskStatus.OPEN;
+    await task.save();
+
     return task;
-  }
-
-  getTaskWithFilter(filterDto: GetTaskFilterDto): Task[] {
-    const { status, search }: GetTaskFilterDto = filterDto;
-    if (!status && !search) {
-      return this.getAllTasks();
-    }
-    let tasks: Task[] = this.tasks;
-    if (status) {
-      tasks = this.tasks.filter(task => task.status === status);
-    }
-    if (search) {
-      tasks = this.tasks.filter(
-        (task: Task) =>
-          task.title.includes(search) || task.description.includes(search),
-      );
-    }
-    return tasks;
   }
 }

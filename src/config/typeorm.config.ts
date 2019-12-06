@@ -1,4 +1,5 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { Task } from '../tasks/task.entity';
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
   type: 'postgres',
@@ -7,6 +8,7 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   username: 'postgres',
   password: 'root', // TODO: use `.env` for sensitive data
   database: 'taskmanagement',
-  entities: [`${__dirname}/../**/*.entity.ts`],
-  synchronize: true, // setting `true` not recommended in production
+  // entities: [`${__dirname}/../**/*.entity.ts`],
+  entities: [Task],
+  synchronize: false, // setting `true` not recommended in production
 };
