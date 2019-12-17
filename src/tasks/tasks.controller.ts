@@ -22,6 +22,11 @@ import { TaskStatus } from './taskstatus.enum';
 export class TasksController {
   constructor(private taskService: TasksService) {}
 
+  @Get()
+  getTasks(@Query(ValidationPipe) filterDto: GetTaskFilterDto) {
+    return this.taskService.getTasks(filterDto);
+  }
+
   @Get('/:id')
   getTaskById(@Param('id', ParseIntPipe) id: number): Promise<Task> {
     return this.taskService.getTaskById(id);
@@ -35,7 +40,6 @@ export class TasksController {
 
   @Delete('/:id')
   deleteTask(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    // tslint:disable-next-line:no-console
     return this.taskService.deleteTask(id);
   }
 

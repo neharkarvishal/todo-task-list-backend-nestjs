@@ -1,4 +1,3 @@
-/* tslint:disable:no-console */
 import { BadRequestException, PipeTransform } from '@nestjs/common';
 import { TaskStatus } from '../taskstatus.enum';
 
